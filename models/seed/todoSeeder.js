@@ -1,7 +1,6 @@
-const express = require('express')
 const mongoose = require('mongoose')
+const Todo = require('../todo')
 
-const app = express()
 // connect to mondoDB/solve the connect DeprecationWarning
 mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -13,12 +12,10 @@ db.on('error', () => {
 // db connect succeed tips
 db.once('open', () => {
   console.log('mongodb connected!')
-})
-// define 根目錄 static view
-app.get('/', (req, res) => {
-  res.send(`<h1>hello world!</h1>`)
-})
-// http://localhost:3000 connect succeed tips
-app.listen(3000, () => {
-  console.log('App is runnung on http://localhost:3000.')
+
+  for (i = 0; i < 10; i++) {
+    Todo.create({ name: `name-${i}`})
+  }
+  
+  console.log('done')
 })
