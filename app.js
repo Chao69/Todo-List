@@ -50,6 +50,15 @@ app.post('/todos', (req, res) => {
     .catch(erro => console.log(error))
 })
 
+// todo detail url
+app.get('/todos/:id', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .lean()
+    .then(todo => res.render('detail', { todo }))
+    .catch(error => console.log(error))
+})
+
 // http://localhost:3000 connect succeed tips
 app.listen(3000, () => {
   console.log('App is runnung on http://localhost:3000.')
