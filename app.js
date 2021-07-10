@@ -79,6 +79,16 @@ app.post('/todos/:id/edit', (req, res) => {
     .then(() => res.redirect(`/todos/${id}`))
     .catch(error => console.log(error))
 })
+
+// delete todo
+app.post('/todos/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .then(todo => todo.remove())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
+
 // http://localhost:3000 connect succeed tips
 app.listen(3000, () => {
   console.log('App is runnung on http://localhost:3000.')
