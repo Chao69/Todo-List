@@ -5,6 +5,8 @@ const Todo = require('./models/todo')
 const bodyParser = require('body-parser')
 
 const app = express()
+
+const methodOverride = require('method-override')
 // connect to mondoDB/solve the connect DeprecationWarning
 mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -26,12 +28,15 @@ app.set('view engine', 'hbs')
 // use body-parser
 app.use(bodyParser.urlencoded({ extended: true }))
 
+// use method-override
+app.use(methodOverride('_method'))
+
 // define 根目錄 static view
 app.get('/', (req, res) => {
   // 取得所有Todo資料
   Todo.find()
     .lean()
-    .sort({ _id: 'asc' }) //正序：'asc'; 反序：'desc'
+    .sort({ name: 'asc' }) //正序：'asc'; 反序：'desc'
     .then(todos => res.render('index', { todos }))
     .catch(error => console.error(error))
 })
@@ -69,7 +74,7 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body
   return Todo.findById(id)
@@ -83,7 +88,7 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 // delete todo
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove())
