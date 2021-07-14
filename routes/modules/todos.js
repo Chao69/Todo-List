@@ -3,7 +3,7 @@ const router = express.Router()
 const Todo = require('../../models/todo')
 
 // create new todo
-router.get('/todos/new', (req, res) => {
+router.get('/new', (req, res) => {
   // link to create page
   return res.render('new')
 })
